@@ -1,5 +1,8 @@
 import random
 
+"""
+ List of all characteristics and possbile answers
+"""
 criteria = {
     "Clothes color": ["light", "dark", "transparent", "multicolored"],
     "Accent": ["german", "american", "indian", "french"],
@@ -11,6 +14,20 @@ criteria = {
     "Face shape": ["round", "oval", "square", "triangle"]
 }
 
+
+"""
+Rules for a citizen to match a planet.
+
+OR relationship is represented horizontally
+e.g. "Clothes color": ["dark", "light"],
+Clothes can be of either dark OR light colors
+
+AND relationship is represented vertically
+e.g. "Number of arms": ["2"],
+     "Face shape": ["square"]
+Citizen must have square face AND 2 arms
+
+"""
 planets = {
     "Mars": {
         "Clothes color": ["dark", "multicolored", "transparent"],
@@ -76,6 +93,7 @@ def resolve(characteristic):
     for i, answer in enumerate(criteria[characteristic]):
         print(i, ") ", answer)
 
+    # User input handling
     while True:
         user_selection = input("Selected answer: ")
         if not user_selection.isnumeric() or int(user_selection) >= len(criteria[characteristic]):
@@ -86,6 +104,9 @@ def resolve(characteristic):
 
     planets_to_remove = []
 
+    # Iterate through the DB-like dictionary and 
+    # remove categories that do not satisfy
+    # user seletion
     for planet in planets:
         if characteristic in planets[planet] \
                 and criteria[characteristic][user_selection] not in planets[planet][characteristic]:
@@ -96,11 +117,13 @@ def resolve(characteristic):
     print("Certainly not from: ", planets_to_remove)
     print("Possibly from: ", list(planets.keys()))
 
+    # returns the list of possible answers
     return list(planets.keys())
 
 
 if __name__ == "__main__":
     print("Please provide information based on the following criteria:")
+    # asks until either 1 or 0 answers are found in the system
     while True:
         _characteristic = random.choice(list(criteria.keys()))
         _planet = resolve(_characteristic)
